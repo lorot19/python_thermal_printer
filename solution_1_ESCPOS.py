@@ -17,7 +17,7 @@ no device found. To fix that problems few things needs to be done:
 
 1. if not, install pyUSB -> pip install pyusb
 2. download libUSB driver -> https://github.com/libusb/libusb/releases/tag/v1.0.20
-    and copy DLL files to system32 folder
+    and copy 64bit DLL files to system32 folder or 32bit files to WoW64 folder
 3. comment following lines in printer.py for more info:
     -> https://nyorikakar.medium.com/printing-with-python-and-epson-pos-printer-fbd17e127b6c
     try:
@@ -30,13 +30,17 @@ no device found. To fix that problems few things needs to be done:
         except usb.core.USBError as e:
             if check_driver is not None:
                 print("Could not detatch kernel driver: {0}".format(str(e)))
-4. sometimes also zadig tool could be very useful: https://zadig.akeo.ie
+4. Install libUSB driver using zadig tool: https://zadig.akeo.ie to inst
+NOTE for solution 1 you need to choose libusb driver in Device Manager
+For other solutions plese use generic driver
 """
 #
 
 from escpos.printer import Usb
+from time import sleep
 
 p = Usb(0x6868, 0x0200)
+sleep(1) # FIX error on WIN32 : win error: A device which does not exist was specified
 p.text("This is example of printing\n")
 p.image("image.png")
 p.barcode('1324354657687', 'EAN13', 64, 2, '', '')
